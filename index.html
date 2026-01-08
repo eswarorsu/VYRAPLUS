@@ -38,6 +38,7 @@ vyraa.html
     .hidden{display:none !important}
 
     /* ===== Nav ===== */
+
     .nav{
       position:sticky; top:0; z-index:80;
       backdrop-filter: blur(10px);
@@ -135,6 +136,26 @@ vyraa.html
     }
 
     /* ===== Layout for Home ===== */
+  /* ===== Diamond behind VYRA+ ===== */
+.brand-diamond {
+  position: relative;
+  display: inline-block;
+  padding: 6px 18px;
+  z-index: 1;
+}
+
+.brand-diamond::before {
+  content: "";
+  position: absolute;
+  inset: -16px -20px;
+  background: url("c:\Users\orsul\Downloads\ChatGPT Image Jan 8, 2026, 11_48_25 AM.png") no-repeat center;
+  background-size: contain;
+  opacity: 0.28;
+  z-index: -1;
+  filter: drop-shadow(0 10px 26px rgba(212,175,55,0.5));
+}
+
+
     .main{
       margin-top:18px;
       display:grid;
@@ -331,11 +352,17 @@ vyraa.html
     }
 
     /* checkout (Home) */
-    .checkout{position:sticky; top:78px;}
-    .checkout .card{
-      background: linear-gradient(180deg, rgba(12,13,15,.97), rgba(10,11,13,.97));
-      border-color: rgba(255,255,255,.10);
-    }
+    /* Keep right-side mascot fixed in view */
+.checkout {
+  position: sticky;
+  top: 24px; /* distance from top */
+  align-self: flex-start;
+}
+
+/* Optional: prevent image jump on resize */
+.checkout img {
+  display: block;
+}
     .checkout-head{
       display:flex; align-items:center; justify-content:space-between; gap:10px;
       border-bottom:1px solid rgba(255,255,255,.08);
@@ -591,7 +618,11 @@ vyraa.html
   ========================== -->
   <div class="wrap page" id="page-home">
     <div class="kicker"><span class="dot"></span> Premium Rewards Club • Transparent Draws • Cancel Anytime</div>
-    <h1>VYRA+ Is a Rewards Club — Not a Lottery</h1>
+    <h1>
+  <span class="brand-diamond">VYRA+</span>
+  Is a Rewards Club — Not a Lottery
+</h1>
+
     <p class="sub">
       Join a premium rewards community. Enjoy monthly member perks and access transparent, livestreamed prize draws.
       No pressure. No tricks. Free entry always available.
@@ -604,8 +635,6 @@ vyraa.html
     </div>
 
     <div style="margin-top:14px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-      <div class="muted" style="font-weight:950">Follow & join:</div>
-      <div class="social-row" id="socialRowHome"></div>
     </div>
 
     <div class="trustbar">
@@ -741,141 +770,21 @@ vyraa.html
           </div>
         </div>
       </div>
+      <!-- RIGHT: Hero Mascot Image -->
+<aside class="checkout" aria-label="Brand mascot">
+  <div class="card" style="display:flex; justify-content:center; align-items:center; padding:24px;">
+    <img 
+      src="c:\Users\orsul\Downloads\ChatGPT Image Jan 8, 2026, 11_17_58 AM.png"
+      alt="VYRA+ Mascot"
+      style="
+        max-width:100%;
+        height:auto;
+        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6));
+      "
+    />
+  </div>
+</aside>
 
-      <!-- RIGHT: Embedded Checkout (Preview) -->
-      <aside class="checkout" aria-label="Embedded checkout">
-        <div class="card">
-          <div class="checkout-head">
-            <div>
-              <strong>Checkout</strong>
-              <div class="mini">Embedded • INR • Preview</div>
-            </div>
-            <div class="mini" id="planChip">VYRA+ PLUS</div>
-          </div>
-
-          <div class="stepper" aria-label="checkout steps">
-            <div class="step active" id="st1"><span class="n">1</span> Plan</div>
-            <div class="step" id="st2"><span class="n">2</span> Details</div>
-            <div class="step" id="st3"><span class="n">3</span> Pay</div>
-          </div>
-
-          <div class="card-inner">
-            <div id="step1">
-              <div class="hintbox">Step 1: Pick a plan + billing. Then continue.</div>
-
-              <div style="margin-top:12px; display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
-                <div class="toggle" aria-label="billing toggle">
-                  <span class="muted" style="font-weight:950;">Monthly</span>
-                  <div class="switch" id="billingSwitch" onclick="toggleBilling()"><div class="knob"></div></div>
-                  <span class="muted" style="font-weight:950;">Annual</span>
-                  <span class="save">Save ~17%</span>
-                </div>
-                <a class="btn btn-ghost" href="#pricing">View all plans</a>
-              </div>
-
-              <div class="summary">
-                <div class="summary-row">
-                  <div>
-                    <div style="font-weight:950" id="sumPlan">VYRA+ PLUS</div>
-                    <div class="muted" id="sumBilling">Billing: Monthly</div>
-                  </div>
-                  <div style="font-weight:950" id="sumPrice">₹999</div>
-                </div>
-                <div class="summary-row">
-                  <div class="muted">Platform fee (preview)</div>
-                  <div id="sumFee">₹0</div>
-                </div>
-                <div class="summary-row total">
-                  <div>Total today</div>
-                  <div id="sumTotal">₹999</div>
-                </div>
-              </div>
-
-              <button class="btn btn-gold" onclick="goStep(2)">Continue</button>
-              <button class="btn btn-ghost" onclick="go('#verify')">Verify WhatsApp</button>
-
-              <div class="legal">
-                Membership provides perks independent of draws. No purchase required for draw entry. Free entry always available.
-              </div>
-            </div>
-
-            <div id="step2" style="display:none;">
-              <div class="hintbox">Step 2: Add your details.</div>
-
-              <div class="field">
-                <label>Email</label>
-                <input id="email" placeholder="you@email.com" />
-              </div>
-
-              <div class="field">
-                <label>Full Name</label>
-                <input id="name" placeholder="Your name" />
-              </div>
-
-              <div class="field">
-                <label>WhatsApp number</label>
-                <input id="phone" placeholder="+919032334791" value="+919032334791" />
-              </div>
-
-              <div class="field">
-                <label>Country</label>
-                <select id="country">
-                  <option value="India">India</option>
-                  <option value="Australia">Australia</option>
-                  <option value="Other">Other</option>
-                </select>
-              </div>
-
-              <button class="btn btn-gold" onclick="validateAndGoPay()">Continue to Pay</button>
-              <button class="btn" onclick="goStep(1)">Back</button>
-
-              <div class="legal">
-                By continuing, you agree to the Terms & Privacy Policy (preview).
-              </div>
-            </div>
-
-            <div id="step3" style="display:none;">
-              <div class="hintbox">Step 3: Confirm and pay (preview).</div>
-
-              <div class="summary">
-                <div class="summary-row">
-                  <div>
-                    <div style="font-weight:950" id="sumPlan2">VYRA+ PLUS</div>
-                    <div class="muted" id="sumBilling2">Billing: Monthly</div>
-                    <div class="muted" id="sumEmail">Email: —</div>
-                    <div class="muted" id="sumCountry">Country: —</div>
-                  </div>
-                  <div style="font-weight:950" id="sumTotal2">₹999</div>
-                </div>
-                <div class="summary-row total">
-                  <div>Billing</div>
-                  <div id="billWord">Monthly</div>
-                </div>
-              </div>
-
-              <button class="btn btn-gold" onclick="previewPay()">Pay & Join (Preview)</button>
-              <button class="btn" onclick="goStep(2)">Back</button>
-
-              <div class="legal">
-                Preview only. Real payments need Razorpay/UPI backend integration.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:14px;">
-          <div class="card-inner">
-            <strong style="display:block; font-size:14px;">Quick actions</strong>
-            <div class="muted" style="margin-top:8px; font-size:13px">
-              Finish verification → then pay → dashboard unlocks.
-            </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-              <a class="btn btn-ghost" href="#verify">Verify WhatsApp</a>
-              <a class="btn btn-gold" href="#pay">Go to Payment Page</a>
-            </div>
-          </div>
-        </div>
-      </aside>
     </div>
   </div>
 
@@ -1298,7 +1207,7 @@ vyraa.html
       { name:"YouTube", href:"https://www.youtube.com/@VyraPlusclub", label:"@VyraPlusclub", icon:"yt" },
       { name:"Telegram", href:"https://t.me/vyraclub", label:"VYRA+ Official", icon:"tg" },
       { name:"Facebook (Profile)", href:"https://www.facebook.com/profile.php?id=61584831923342", label:"VYRA plus", icon:"fb" },
-      { name:"Facebook (Page)", href:"https://www.facebook.com/search/top?q=VYRA%2B%20Rewards%20CLUB", label:"VYRA+ Rewards CLUB", icon:"fb" },
+
     ];
 
     function iconSVG(kind){
@@ -1825,3 +1734,5 @@ vyraa.html
   </script>
 </body>
 </html>
+
+
