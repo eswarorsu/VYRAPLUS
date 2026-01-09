@@ -1,0 +1,425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VYRA+ — Secure Payment</title>
+
+<style>
+:root{
+  --bg:#070708;
+  --text:#f2f2f2;
+  --muted:#b8b8b8;
+  --gold:#d4af37;
+  --gold2:#ffdf7e;
+  --radius:18px;
+  --shadow:0 18px 60px rgba(0,0,0,.65);
+  --max:1180px;
+}
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(212,175,55,.25), transparent 55%),
+    var(--bg);
+  color:var(--text);
+}
+
+/* ================= NAV ================= */
+.nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(7,7,8,.75);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,.08);
+}
+.nav-inner{
+  max-width:var(--max);
+  margin:auto;
+  padding:14px 18px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  flex-wrap:wrap;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:950;
+  cursor:pointer;
+}
+.logo{
+  width:34px;height:34px;border-radius:10px;
+  background:linear-gradient(135deg,var(--gold),rgba(212,175,55,.25));
+}
+.nav-links{
+  display:flex;
+  gap:14px;
+  flex-wrap:wrap;
+}
+.nav-links a{
+  color:var(--muted);
+  text-decoration:none;
+  font-weight:900;
+  padding:8px 12px;
+  border-radius:12px;
+}
+.nav-links a:hover{
+  color:var(--text);
+  background:rgba(255,255,255,.05);
+}
+.nav-links a.active{
+  color:var(--text);
+  border:1px solid rgba(212,175,55,.45);
+  background:rgba(212,175,55,.12);
+}
+.btn{
+  padding:10px 14px;
+  border-radius:14px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  text-decoration:none;
+  font-weight:900;
+}
+.btn-gold{
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#14110a;
+  border:1px solid rgba(212,175,55,.6);
+  box-shadow:0 12px 40px rgba(212,175,55,.25);
+}
+
+/* ================= PAGE ================= */
+.page{
+  max-width:var(--max);
+  margin:auto;
+  padding:28px 18px 120px;
+}
+.kicker{
+  display:inline-flex;
+  gap:8px;
+  align-items:center;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);
+  font-size:12px;
+  font-weight:900;
+  color:var(--muted);
+}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}
+h1{margin:16px 0 8px;font-size:42px}
+.sub{color:var(--muted);max-width:720px}
+
+/* ================= GRID ================= */
+.grid{
+  margin-top:22px;
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:18px;
+}
+
+/* ================= CARD ================= */
+.card{
+  border-radius:var(--radius);
+  background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+  border:1px solid rgba(255,255,255,.08);
+  box-shadow:var(--shadow);
+}
+.card-inner{padding:18px}
+
+/* ================= BILLING ================= */
+.billing{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:14px;
+}
+.switch{
+  width:56px;height:30px;border-radius:999px;
+  background:#000;
+  border:1px solid rgba(255,255,255,.2);
+  position:relative;
+  cursor:pointer;
+}
+.knob{
+  width:24px;height:24px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  position:absolute;top:3px;left:3px;
+  transition:.2s;
+}
+.switch.on .knob{left:29px}
+
+/* ================= PLANS ================= */
+.plans{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+}
+.plan{
+  padding:18px;
+  border-radius:18px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.12);
+  cursor:pointer;
+  position:relative;
+  transition:.18s ease;
+}
+.plan:hover{transform:translateY(-2px)}
+.plan.selected{
+  border-color:rgba(212,175,55,.7);
+  box-shadow:
+    0 0 0 1px rgba(212,175,55,.3) inset,
+    0 18px 50px rgba(212,175,55,.25);
+}
+.badge{
+  position:absolute;top:12px;right:12px;
+  padding:6px 10px;
+  border-radius:999px;
+  background:rgba(212,175,55,.15);
+  border:1px solid rgba(212,175,55,.4);
+  color:var(--gold2);
+  font-size:9px;
+  font-weight:700;
+}
+.price{font-size:28px;font-weight:950;margin-top:6px}
+.per{font-size:12px;color:var(--muted)}
+.benefits{
+  list-style:none;
+  padding:0;
+  margin-top:12px;
+  font-size:13px;
+}
+.benefits li{
+  margin:7px 0;
+  display:flex;
+  gap:8px;
+  color:var(--muted);
+}
+.benefits li::before{
+  content:"✓";
+  color:var(--gold);
+  font-weight:950;
+}
+
+/* ================= SUMMARY ================= */
+.summary{
+  border:1px solid rgba(255,255,255,.1);
+  border-radius:16px;
+  padding:14px;
+}
+.row{
+  display:flex;
+  justify-content:space-between;
+  margin:8px 0;
+  font-weight:900;
+}
+.total{font-size:18px}
+.strike span:last-child{
+  text-decoration:line-through;
+  opacity:.6;
+}
+.save-note{
+  margin-top:8px;
+  font-size:12.5px;
+  font-weight:900;
+  color:var(--gold2);
+}
+
+/* ================= FORM ================= */
+.field label{
+  display:block;
+  margin-top:12px;
+  font-size:12px;
+  font-weight:900;
+  color:var(--muted);
+}
+.field input{
+  width:100%;
+  padding:12px;
+  margin-top:6px;
+  border-radius:14px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.12);
+  color:var(--text);
+}
+
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr}
+  .plans{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAV -->
+<div class="nav">
+  <div class="nav-inner">
+    <div class="brand" onclick="location.href='home.html'">
+      <div class="logo"></div> VYRA<span style="color:var(--gold2)">+</span>
+    </div>
+    <div class="nav-links">
+      <a href="home.html">Home</a>
+      <a href="pricing.html">Pricing</a>
+      <a href="verify.html">Verify</a>
+      <a href="pay.html" class="active">Pay</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="support.html">Support</a>
+    </div>
+    <a class="btn btn-gold" href="pricing.html">Change Plan</a>
+  </div>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+  <div class="kicker"><span class="dot"></span> Secure Payment • INR</div>
+  <h1>Complete Payment</h1>
+  <p class="sub">Choose your membership and clearly see your savings on annual billing.</p>
+
+  <div class="grid">
+
+    <!-- LEFT -->
+    <div class="card">
+      <div class="card-inner">
+
+        <div class="billing">
+          <span>Monthly</span>
+          <div class="switch" id="billingSwitch" onclick="toggleBilling()">
+            <div class="knob"></div>
+          </div>
+          <span>Annual</span>
+        </div>
+
+        <div class="plans">
+          <div class="plan" onclick="selectPlan('member',this)">
+            <div class="price">₹499</div>
+            <div class="per">VYRA+ MEMBER/month</div>
+            <ul class="benefits">
+              <li>Monthly perks & discounts</li>
+              <li>Access to livestream draws</li>
+              <li>Equal chance entry</li>
+              <li>Dashboard access</li>
+              <li>Cancel anytime</li>
+            </ul>
+          </div>
+
+          <div class="plan selected" onclick="selectPlan('plus',this)">
+            <div class="badge">MOST POPULAR</div>
+            <div class="price">₹999</div>
+            <div class="per">VYRA+ PLUS/month</div>
+            <ul class="benefits">
+              <li>Everything in MEMBER</li>
+              <li>Enhanced monthly perks</li>
+              <li>Priority partner offers</li>
+              <li>More draw entries</li>
+              <li>Priority support</li>
+            </ul>
+          </div>
+
+          <div class="plan" onclick="selectPlan('elite',this)">
+            <div class="price">₹1,999</div>
+            <div class="per">VYRA+ ELITE/month</div>
+            <ul class="benefits">
+              <li>Everything in PLUS</li>
+              <li>Premium partner rewards</li>
+              <li>Maximum draw entries</li>
+              <li>Elite-only opportunities</li>
+              <li>Dedicated support</li>
+            </ul>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="card">
+      <div class="card-inner">
+        <h2>Order Summary</h2>
+
+        <div class="summary">
+          <div class="row">
+            <span id="sumPlan">VYRA+ PLUS</span>
+            <span id="sumMonthly">₹999 / month</span>
+          </div>
+
+          <div class="row strike" id="yearlyStrike" style="display:none">
+            <span>12 months</span>
+            <span id="sumStrike">₹11,988</span>
+          </div>
+
+          <div class="row total">
+            <span>Total Today</span>
+            <span id="sumTotal">₹999</span>
+          </div>
+
+          <div class="save-note" id="saveNote" style="display:none">
+            You save <b id="saveAmount">₹1,998</b> on annual billing
+          </div>
+        </div>
+
+        <div class="field"><label>Email</label><input></div>
+        <div class="field"><label>Full Name</label><input></div>
+        <div class="field"><label>WhatsApp</label><input></div>
+
+        <a class="btn btn-gold" style="width:100%;margin-top:16px" href="dashboard.html">
+         
+          Pay with Razorpay
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let billing="monthly";
+let plan="plus";
+const prices={member:499,plus:999,elite:1999};
+
+function inr(v){return "₹"+v.toLocaleString("en-IN");}
+
+function toggleBilling(){
+  billing=billing==="monthly"?"annual":"monthly";
+  document.getElementById("billingSwitch").classList.toggle("on",billing==="annual");
+  update();
+}
+
+function selectPlan(p,el){
+  plan=p;
+  document.querySelectorAll(".plan").forEach(x=>x.classList.remove("selected"));
+  el.classList.add("selected");
+  update();
+}
+
+function update(){
+  const monthly = prices[plan];
+  const annualOriginal = monthly * 12;
+  const annualDiscounted = monthly * 10;
+  const isAnnual = billing === "annual";
+
+  document.getElementById("sumPlan").textContent = "VYRA+ " + plan.toUpperCase();
+  document.getElementById("sumMonthly").textContent = inr(monthly) + " / month";
+
+  if(isAnnual){
+    document.getElementById("yearlyStrike").style.display = "flex";
+    document.getElementById("saveNote").style.display = "block";
+    document.getElementById("sumStrike").textContent = inr(annualOriginal);
+    document.getElementById("sumTotal").textContent = inr(annualDiscounted);
+    document.getElementById("saveAmount").textContent =
+      inr(annualOriginal - annualDiscounted);
+  } else {
+    document.getElementById("yearlyStrike").style.display = "none";
+    document.getElementById("saveNote").style.display = "none";
+    document.getElementById("sumTotal").textContent = inr(monthly);
+  }
+}
+update();
+</script>
+
+</body>
+</html>

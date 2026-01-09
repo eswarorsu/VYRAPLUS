@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VYRA+ — Verify</title>
+  <style>
+    :root{
+      --bg:#070708; --text:#f2f2f2; --muted:#b8b8b8;
+      --gold:#d4af37; --gold2:#ffdf7e;
+      --line:rgba(212,175,55,.22); --shadow: 0 18px 60px rgba(0,0,0,.65);
+      --radius:18px; --max:1180px;
+      --ok:#33d17a; --bad:#ff6b6b; --info:#64b5ff;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background:
+        radial-gradient(1200px 600px at 50% -10%, rgba(212,175,55,.22), transparent 55%),
+        radial-gradient(900px 500px at 10% 20%, rgba(255,223,126,.12), transparent 60%),
+        radial-gradient(900px 500px at 90% 30%, rgba(212,175,55,.10), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.35;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .nav{
+      position:sticky; top:0; z-index:80;
+      backdrop-filter: blur(10px);
+      background: rgba(7,7,8,.62);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav-inner{max-width:var(--max); margin:0 auto; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px;}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:950; letter-spacing:.5px;}
+    .logo{width:34px; height:34px; border-radius:10px; background: radial-gradient(18px 18px at 30% 30%, rgba(255,223,126,.9), transparent 60%), linear-gradient(135deg, rgba(212,175,55,.95), rgba(212,175,55,.25)); box-shadow: 0 0 0 1px rgba(212,175,55,.25) inset, 0 10px 30px rgba(212,175,55,.12);}
+    .nav-links{display:flex; gap:14px; color:var(--muted); font-weight:900; font-size:13px; flex-wrap:wrap;}
+    .nav-links a{text-decoration:none; padding:8px 10px; border-radius:12px;}
+    .nav-links a:hover{color:var(--text); background: rgba(255,255,255,.05)}
+    .nav-links a.active{color:var(--text); border:1px solid rgba(212,175,55,.35); background: rgba(212,175,55,.10)}
+    .btn{border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.06); color:var(--text); padding:10px 14px; border-radius:14px; cursor:pointer; font-weight:950; transition:.18s ease; text-decoration:none; display:inline-flex; align-items:center; justify-content:center; gap:8px; user-select:none; white-space:nowrap;}
+    .btn:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.22)}
+    .btn-gold{border:1px solid rgba(212,175,55,.55); background: linear-gradient(135deg, rgba(212,175,55,.95), rgba(255,223,126,.55)); color:#14110a; box-shadow: 0 12px 40px rgba(212,175,55,.18);}
+    .btn-ghost{border:1px solid rgba(212,175,55,.35); background: transparent; color:var(--text);}
+    .wrap{max-width:var(--max); margin:0 auto; padding:22px 18px 90px;}
+    .card{border-radius: var(--radius); border:1px solid rgba(255,255,255,.08); background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02)); box-shadow: var(--shadow); overflow:hidden;}
+    .card-inner{padding:18px}
+    .muted{color:var(--muted)}
+    .kicker{display:inline-flex; gap:8px; align-items:center; padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.05); color:var(--muted); font-weight:950; font-size:12.5px;}
+    .dot{width:8px;height:8px;border-radius:99px;background:var(--gold); box-shadow:0 0 0 6px rgba(212,175,55,.15)}
+    h1{margin:14px 0 10px; font-size:44px; letter-spacing:-.6px; line-height:1.05}
+    h2{margin:0; font-size:22px; letter-spacing:-.3px}
+    .sub{max-width:760px; color:var(--muted); font-size:18px}
+    .grid2{display:grid; grid-template-columns: 1.1fr .9fr; gap:14px; align-items:start; margin-top:14px;}
+    .field label{display:block; font-size:12px; color:var(--muted); font-weight:950; margin:12px 0 6px}
+    .field input{width:100%; padding:12px 12px; border-radius: 14px; border:1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.04); color:var(--text); outline:none;}
+    .field input:focus{border-color: rgba(212,175,55,.45)}
+    .hintbox{margin-top:10px; padding:10px 12px; border-radius: 16px; border:1px solid rgba(212,175,55,.22); background: rgba(212,175,55,.08); color: rgba(242,242,242,.90); font-size:12.5px; font-weight:900;}
+    .legal{margin-top:10px; font-size:11.5px; color:var(--muted); line-height:1.35;}
+
+    .toasts{position:fixed; top: 78px; right: 14px; z-index: 100; display:flex; flex-direction:column; gap:10px; width: min(360px, calc(100vw - 28px));}
+    .toast{border-radius: 18px; border:1px solid rgba(255,255,255,.10); background: rgba(12,13,15,.92); backdrop-filter: blur(10px); padding: 12px 12px; box-shadow: var(--shadow); display:flex; gap:10px; align-items:flex-start;}
+    .t-ic{width:28px;height:28px;border-radius:12px; display:flex;align-items:center;justify-content:center; font-weight:950; border:1px solid rgba(255,255,255,.10); background: rgba(255,255,255,.05); flex:0 0 auto;}
+    .t-ok{border-color: rgba(51,209,122,.35); background: rgba(51,209,122,.10); color: var(--ok)}
+    .t-bad{border-color: rgba(255,107,107,.35); background: rgba(255,107,107,.10); color: var(--bad)}
+    .t-info{border-color: rgba(100,181,255,.35); background: rgba(100,181,255,.10); color: var(--info)}
+    .toast b{display:block}
+    .toast .muted{font-size:12px}
+
+    @media (max-width: 980px){
+      .nav-links{display:none}
+      .grid2{grid-template-columns:1fr}
+      h1{font-size:36px}
+      .wrap{padding-bottom: 120px;}
+    }
+  </style>
+</head>
+<body>
+  <div class="toasts" id="toasts"></div>
+
+  <div class="nav">
+    <div class="nav-inner">
+      <div class="brand" style="cursor:pointer" onclick="location.href='home.html'">
+        <div class="logo"></div>
+        <div>VYRA<span style="color:var(--gold2)">+</span></div>
+      </div>
+      <div class="nav-links">
+        <a href="home.html">Home</a>
+        <a href="pricing.html">Pricing</a>
+        <a class="active" href="verify.html">Verify</a>
+        <a href="pay.html">Pay</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="support.html">Support</a>
+      </div>
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <a class="btn btn-ghost" href="pricing.html">Back</a>
+        <a class="btn btn-gold" href="dashboard.html">Dashboard</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="kicker"><span class="dot"></span> WhatsApp Verification (OTP-style)</div>
+    <h1>Verify your WhatsApp number</h1>
+    <p class="sub"></p>
+
+    <div class="grid2">
+      <div class="card">
+        <div class="card-inner">
+          <h2>Send code</h2>
+          <div class="field">
+  <label>Full Name</label>
+  <input id="vName" placeholder="Enter your full name" />
+</div>
+
+<div class="field">
+  <label>Email ID</label>
+  <input id="vEmail" type="email" placeholder="you@example.com" />
+</div>
+
+          <div class="field">
+            <label>WhatsApp number</label>
+            <input id="vPhone" value="+91" />
+          </div>
+          <button class="btn btn-gold" onclick="sendOtp()">Send code on WhatsApp</button>
+
+          <div class="hintbox">
+            <div style="margin-top:10px; font-size:18px; font-weight:950">
+              OTP: <span id="otpShown">—</span>
+            </div>
+            <div class="muted" style="margin-top:6px">Expires in 10 minutes.</div>
+          </div>
+
+          <div class="legal">Do not share your code with anyone.</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-inner">
+          <h2>Verify code</h2>
+          <div class="field">
+            <label>Enter 6-digit code</label>
+            <input id="vCode" inputmode="numeric" placeholder="123456"
+                   oninput="this.value=this.value.replace(/\\D/g,'').slice(0,6)" />
+          </div>
+          <button class="btn btn-gold" onclick="verifyOtp()">Verify</button>
+          <button class="btn btn-ghost" onclick="location.href='dashboard.html'">Go to Dashboard</button>
+          <div class="legal">After verification, dashboard unlocks .</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STATE = {
+      otp: { code: null, expiresAt: 0 }
+    };
+
+    function toast(type, title, msg){
+      const toasts = document.getElementById("toasts");
+      const t = document.createElement("div");
+      const cls = type==="ok" ? "t-ok" : type==="bad" ? "t-bad" : "t-info";
+      const symbol = type==="ok" ? "✓" : type==="bad" ? "!" : "i";
+      t.className = "toast";
+      t.innerHTML = `
+        <div class="t-ic ${cls}">${symbol}</div>
+        <div><b>${title}</b><div class="muted">${msg}</div></div>
+      `;
+      toasts.appendChild(t);
+      setTimeout(() => { t.style.opacity = "0"; t.style.transform = "translateY(-6px)"; }, 3200);
+      setTimeout(() => { t.remove(); }, 3800);
+    }
+
+    function generateOtp(){
+      return String(Math.floor(100000 + Math.random() * 900000));
+    }
+
+    function sendOtp(){
+      const phone = document.getElementById("vPhone").value.trim();
+      if(!phone || !phone.startsWith("+")){
+        toast("bad","Invalid phone","Use format like +91XXXXXXXXXX");
+        return;
+      }
+      const code = generateOtp();
+      STATE.otp.code = code;
+      STATE.otp.expiresAt = Date.now() + 10*60*1000;
+      document.getElementById("otpShown").textContent = code;
+      localStorage.setItem("vyra_phone", phone);
+      toast("ok","Code generated ", `OTP generated for ${phone}.`);
+    }
+
+    function verifyOtp(){
+      const code = document.getElementById("vCode").value.trim();
+      if(!STATE.otp.code){
+        toast("bad","No code yet","Send a code first.");
+        return;
+      }
+      if(Date.now() > STATE.otp.expiresAt){
+        toast("bad","Code expired","Please resend code.");
+        return;
+      }
+      if(code !== STATE.otp.code){
+        toast("bad","Wrong code","Try again.");
+        return;
+      }
+      localStorage.setItem("vyra_verified", "true");
+      toast("ok","Verified","WhatsApp verified. Dashboard unlocked.");
+      setTimeout(()=> location.href="dashboard.html", 700);
+    }
+  </script>
+</body>
+</html>  

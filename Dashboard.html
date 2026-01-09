@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VYRA+ — Dashboard</title>
+  <style>
+    :root{
+      --bg:#070708; --text:#f2f2f2; --muted:#b8b8b8;
+      --gold:#d4af37; --gold2:#ffdf7e;
+      --line:rgba(212,175,55,.22); --shadow: 0 18px 60px rgba(0,0,0,.65);
+      --radius:18px; --max:1180px;
+
+      /* needed by original coupons section */
+      --page-padding:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background:
+        radial-gradient(1200px 600px at 50% -10%, rgba(212,175,55,.22), transparent 55%),
+        radial-gradient(900px 500px at 10% 20%, rgba(255,223,126,.12), transparent 60%),
+        radial-gradient(900px 500px at 90% 30%, rgba(212,175,55,.10), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.35;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .nav{
+      position:sticky; top:0; z-index:80;
+      backdrop-filter: blur(10px);
+      background: rgba(7,7,8,.62);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav-inner{max-width:var(--max); margin:0 auto; padding:14px 18px; display:flex; align-items:center; justify-content:space-between; gap:12px;}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:950; letter-spacing:.5px;}
+    .logo{
+      width:34px; height:34px; border-radius:10px;
+      background:
+        radial-gradient(18px 18px at 30% 30%, rgba(255,223,126,.9), transparent 60%),
+        linear-gradient(135deg, rgba(212,175,55,.95), rgba(212,175,55,.25));
+      box-shadow: 0 0 0 1px rgba(212,175,55,.25) inset, 0 10px 30px rgba(212,175,55,.12);
+    }
+    .nav-links{display:flex; gap:14px; color:var(--muted); font-weight:900; font-size:13px; flex-wrap:wrap;}
+    .nav-links a{text-decoration:none; padding:8px 10px; border-radius:12px;}
+    .nav-links a:hover{color:var(--text); background: rgba(255,255,255,.05)}
+    .nav-links a.active{color:var(--text); border:1px solid rgba(212,175,55,.35); background: rgba(212,175,55,.10)}
+    .btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:950;
+      transition:.18s ease;
+      text-decoration:none;
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:8px;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.22)}
+    .btn-gold{
+      border:1px solid rgba(212,175,55,.55);
+      background: linear-gradient(135deg, rgba(212,175,55,.95), rgba(255,223,126,.55));
+      color:#14110a;
+      box-shadow: 0 12px 40px rgba(212,175,55,.18);
+    }
+    .btn-ghost{border:1px solid rgba(212,175,55,.35); background: transparent; color:var(--text);}
+
+    .wrap{max-width:var(--max); margin:0 auto; padding:22px 18px 110px;}
+    .kicker{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:8px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      color:var(--muted); font-weight:950; font-size:12.5px;
+    }
+    .dot{width:8px;height:8px;border-radius:99px;background:var(--gold); box-shadow:0 0 0 6px rgba(212,175,55,.15)}
+    h1{margin:14px 0 10px; font-size:44px; letter-spacing:-.6px; line-height:1.05}
+    h2{margin:0; font-size:22px; letter-spacing:-.3px}
+    .sub{max-width:760px; color:var(--muted); font-size:18px}
+
+    .card{
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-inner{padding:18px}
+    .muted{color:var(--muted)}
+    .summary{
+      margin-top:12px;
+      padding:12px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+    }
+
+    .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+    .grid2{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; align-items:start;}
+
+    /* ===== Slider (kept minimal, same behaviour as your other pages) ===== */
+    .slider{
+      margin-top:14px;
+      position:relative;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      overflow:hidden;
+    }
+    .slides{display:flex; transition: transform .35s ease; will-change: transform;}
+    .slide{min-width:100%; padding:16px; display:flex; gap:12px; align-items:flex-start;}
+    .avatar{
+      width:42px; height:42px; border-radius:14px;
+      border:1px solid rgba(212,175,55,.28);
+      background: rgba(212,175,55,.10);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:950; color: var(--gold2);
+      flex:0 0 auto;
+    }
+    .slider-controls{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 12px;
+      border-top:1px solid rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size:12px;
+      font-weight:950;
+      gap:10px;
+    }
+    .dots{display:flex; gap:6px; align-items:center}
+    .dotx{width:7px; height:7px; border-radius:999px; background: rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.10);}
+    .dotx.active{background: rgba(212,175,55,.75); border-color: rgba(212,175,55,.35); box-shadow: 0 0 0 4px rgba(212,175,55,.12);}
+    .navbtn{padding:8px 10px; border-radius:12px; border:1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.05); color: var(--text); cursor:pointer; font-weight:950;}
+
+    /* =========================
+       ✅ RESTORED: COUPONS MODULE CSS (EXACT FROM index con.html)
+    ========================== */
+    .full-width-board {
+      width: 100%;
+      margin-left: calc(-1 * var(--page-padding, 24px));
+      margin-right: calc(-1 * var(--page-padding, 24px));
+      padding: 32px 24px;
+      background: linear-gradient(180deg, #0a0a0a, #0f0f0f);
+      border-top: 1px solid rgba(212, 175, 55, 0.25);
+      border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+      margin-top: 14px;
+    }
+    .full-width-inner { max-width: 1200px; margin: 0 auto; }
+    .full-width-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-top: 20px;
+    }
+    .square-coupon {
+      aspect-ratio: 1 / 1;
+      width: 100%;
+      background: linear-gradient(180deg, #0b0b0b, #121212);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 16px;
+      display: flex;
+    }
+    .square-coupon .card-inner {
+      width: 100%;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .coupon-logo {
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .coupon-logo img {
+      max-height: 44px;
+      max-width: 120px;
+      object-fit: contain;
+    }
+    @media (max-width: 768px) {
+      .full-width-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 980px){
+      .nav-links{display:none}
+      .grid2{grid-template-columns:1fr}
+      .grid3{grid-template-columns:1fr}
+      h1{font-size:36px}
+      .wrap{padding-bottom: 130px;}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <div class="brand" style="cursor:pointer" onclick="location.href='home.html'">
+        <div class="logo"></div>
+        <div>VYRA<span style="color:var(--gold2)">+</span></div>
+      </div>
+
+      <div class="nav-links">
+        <a href="home.html">Home</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="verify.html">Verify</a>
+        <a href="pay.html">Pay</a>
+        <a class="active" href="dashboard.html">Dashboard</a>
+        <a href="support.html">Support</a>
+      </div>
+
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <a class="btn btn-ghost" href="verify.html">Verify</a>
+        <a class="btn btn-gold" href="pay.html">Manage</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="kicker"><span class="dot"></span> Member Dashboard • Status • Entries • Proof</div>
+    <h1>Dashboard</h1>
+    <p class="sub"></p>
+
+    <div class="grid3" style="margin-top:14px;">
+      <div class="card">
+        <div class="card-inner">
+          <div class="muted" style="font-weight:950">Profile</div>
+          <div style="margin-top:10px; font-weight:950" id="dashName">NAME:</div>
+          <div class="muted" id="dashEmail">Email:</div>
+          <div class="muted" id="dashPhone">+91</div>
+          <a class="btn" style="margin-top:12px" href="verify.html">Complete KYC</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-inner">
+          <div class="muted" style="font-weight:950">Membership</div>
+          <div style="margin-top:10px; font-weight:950" id="dashTier">VYRA+ PLUS</div>
+          <div class="muted" id="dashStatus">Status: Inactive (preview)</div>
+          <div class="muted" id="dashExpiry">Expiry: —</div>
+          <a class="btn btn-gold" style="margin-top:12px" href="pay.html">Manage membership</a>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-inner">
+          <div class="muted" style="font-weight:950">Next draw</div>
+          <div style="margin-top:10px; font-weight:950" id="dashDrawDate">2026-02-09</div>
+          <div class="muted" id="dashEntries">Entries: 0</div>
+          <div class="muted" id="dashTicket">Ticket: —</div>
+          <button class="btn" style="margin-top:12px" onclick="alert('Preview reminder ✅')">Set reminder</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid2" style="margin-top:14px;">
+      <div class="card">
+        <div class="card-inner">
+          <h2>Winner proof</h2>
+          <div class="muted" style="margin-top:6px">Latest winners (with consent)</div>
+          <div class="slider" style="margin-top:12px">
+            <div class="slides" id="slides2">
+              <div class="slide">
+                <div class="avatar">R</div>
+                <div><b>Rahul • Hyderabad</b><br><span class="muted">Smartphone • Verified • Livestream posted</span></div>
+              </div>
+              <div class="slide">
+                <div class="avatar">A</div>
+                <div><b>Amit • Melbourne</b><br><span class="muted">Travel voucher • Verified • Winner wall</span></div>
+              </div>
+              <div class="slide">
+                <div class="avatar">S</div>
+                <div><b>Shreya • Bengaluru</b><br><span class="muted">Gift bundle • Verified • Timestamp logged</span></div>
+              </div>
+            </div>
+            <div class="slider-controls">
+              <button class="navbtn" onclick="prevSlide2()">‹</button>
+              <div class="dots" id="dots2"></div>
+              <div class="muted">Auto-plays • <span id="slideIndex2">1</span>/3</div>
+              <button class="navbtn" onclick="nextSlide2()">›</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-inner">
+          <h2>Notifications</h2>
+          <div class="muted" style="margin-top:6px">Preview notifications</div>
+
+          <div class="summary" style="margin-top:12px">
+            <b>Verify WhatsApp</b>
+            <div class="muted" style="margin-top:6px">Complete verification to unlock payments and perks.</div>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+            <button class="btn" onclick="alert('Referral preview')">Refer a friend</button>
+            <a class="btn" href="support.html">Contact support</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =========================
+         ✅ RESTORED: COUPONS MODULE (EXACT HTML FROM index con.html)
+    ========================== -->
+    <div class="full-width-board">
+      <div class="full-width-inner">
+        <h2>Member Discount Offers</h2>
+        <div class="muted">Exclusive 10% discounts for VYRA+ members</div>
+
+        <div class="full-width-grid">
+
+          <div class="square-coupon">
+            <div class="card-inner">
+              <div class="coupon-logo">
+                <img src="https://thebrandhopper.com/wp-content/uploads/2020/11/swiggy_lfd_3.jpg" alt="Swiggy">
+              </div>
+              <div>
+                <b>Swiggy</b>
+                <div class="muted">Food & delivery</div>
+              </div>
+              <div>
+                <div class="coupon-pill">10% OFF</div>
+                <div class="coupon-code">VYRA10</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="square-coupon">
+            <div class="card-inner">
+              <div class="coupon-logo">
+                <img src="https://th.bing.com/th/id/OIP.ZpNQJ1Tu0C6nkAxNLh3BYQHaEK?w=315&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3">
+              </div>
+              <div>
+                <b>Zomato</b>
+                <div class="muted">Dining & delivery</div>
+              </div>
+              <div>
+                <div class="coupon-pill">10% OFF</div>
+                <div class="coupon-code">VYRAZ</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="square-coupon">
+            <div class="card-inner">
+              <div class="coupon-logo">
+                <img src="https://th.bing.com/th?q=Big+Basket+Chrome+Logo&w=120&h=120&c=1&rs=1&qlt=70&o=7&cb=1&dpr=1.3&pid=InlineBlock&rm=3&mkt=en-IN&cc=IN&setlang=en&adlt=moderate&t=1&mw=247" alt="BigBasket">
+              </div>
+              <div>
+                <b>BigBasket</b>
+                <div class="muted">Groceries & essentials</div>
+              </div>
+              <div>
+                <div class="coupon-pill">10% OFF</div>
+                <div class="coupon-code">VYRABB</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="square-coupon">
+            <div class="card-inner">
+              <div class="coupon-logo">
+                <img src="https://th.bing.com/th/id/OIP.DAU20wMEz6ziYMKKfWa2gwHaDl?w=310&h=169&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="Instamart">
+              </div>
+              <div>
+                <b>Instamart</b>
+                <div class="muted">Instant grocery delivery</div>
+              </div>
+              <div>
+                <div class="coupon-pill">10% OFF</div>
+                <div class="coupon-code">VYRAIM</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="square-coupon">
+            <div class="card-inner">
+              <div class="coupon-logo">
+                <img src="https://th.bing.com/th/id/OIP.zI_rxKmJKC5LaheVe-QmjAHaEK?w=297&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="Bolt">
+              </div>
+              <div>
+                <b>Bolt</b>
+                <div class="muted">Ride credits</div>
+              </div>
+              <div>
+                <div class="coupon-pill">10% OFF</div>
+                <div class="coupon-code">VYRABOLT</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="square-coupon">
+            <div class="card-inner">
+              <div class="coupon-logo">
+                <img src="https://c8.alamy.com/comp/WPE72E/shanghai-china-7th-sep-2019-german-multinational-shoe-and-sportswear-company-puma-logo-seen-in-shanghai-credit-alex-taisopa-imageszuma-wirealamy-live-news-WPE72E.jpg" alt="Puma">
+              </div>
+              <div>
+                <b>Puma</b>
+                <div class="muted">Footwear & apparel</div>
+              </div>
+              <div>
+                <div class="coupon-pill">10% OFF</div>
+                <div class="coupon-code">VYRAPUMA</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="square-coupon">
+            <div class="card-inner">
+              <div class="coupon-logo">
+                <img src="https://th.bing.com/th/id/OIP.VBWBA4Mg8hGNZ281XMuVigHaD4?w=321&h=180&c=7&r=0&o=7&dpr=1.3&pid=1.7&rm=3" alt="Hotstar">
+              </div>
+              <div>
+                <b>Hotstar</b>
+                <div class="muted">Streaming subscription</div>
+              </div>
+              <div>
+                <div class="coupon-pill">10% OFF</div>
+                <div class="coupon-code">VYRAHOT</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="square-coupon">
+            <div class="card-inner">
+              <div class="coupon-logo">
+                <img src="https://cdn.thecricketpanda.com/wp-content/uploads/2025/06/FanCode.png" alt="FanCode">
+              </div>
+              <div>
+                <b>FanCode</b>
+                <div class="muted">Live sports passes</div>
+              </div>
+              <div>
+                <div class="coupon-pill">10% OFF</div>
+                <div class="coupon-code">VYRAFC</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // simple slider logic (same behaviour)
+    const slidesEl2 = document.getElementById("slides2");
+    const slideCount2 = slidesEl2.children.length;
+    const dotsEl2 = document.getElementById("dots2");
+    let currentSlide2 = 0;
+
+    function renderDots2(){
+      dotsEl2.innerHTML = "";
+      for(let i=0;i<slideCount2;i++){
+        const d = document.createElement("div");
+        d.className = "dotx" + (i===currentSlide2 ? " active" : "");
+        d.onclick = () => goSlide2(i);
+        dotsEl2.appendChild(d);
+      }
+      document.getElementById("slideIndex2").textContent = (currentSlide2 + 1);
+    }
+    function goSlide2(i){
+      currentSlide2 = (i + slideCount2) % slideCount2;
+      slidesEl2.style.transform = `translateX(-${currentSlide2 * 100}%)`;
+      renderDots2();
+    }
+    function nextSlide2(){ goSlide2(currentSlide2 + 1); }
+    function prevSlide2(){ goSlide2(currentSlide2 - 1); }
+
+    renderDots2();
+    setInterval(nextSlide2, 4500);
+
+    // dashboard fields (kept simple — reads what your other pages store)
+    document.getElementById("dashName").textContent = localStorage.getItem("vyra_name") || "NAME:";
+    document.getElementById("dashEmail").textContent = localStorage.getItem("vyra_email") || "EMAIL:";
+    document.getElementById("dashPhone").textContent = localStorage.getItem("vyra_phone") || "+91";
+
+    const plan = (localStorage.getItem("vyra_plan") || "plus").toUpperCase();
+    document.getElementById("dashTier").textContent = "VYRA+ " + plan;
+
+    const paid = localStorage.getItem("vyra_paid") === "true";
+    document.getElementById("dashStatus").textContent = paid ? "Status: Active ✅ (preview)" : "Status: Inactive";
+  </script>
+</body>
+</html>

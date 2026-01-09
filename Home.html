@@ -1,0 +1,554 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VYRA+ — Home</title>
+  <style>
+    :root{
+      --bg:#070708; --text:#f2f2f2; --muted:#b8b8b8;
+      --gold:#d4af37; --gold2:#ffdf7e;
+      --line:rgba(212,175,55,.22); --shadow: 0 18px 60px rgba(0,0,0,.65);
+      --radius:18px; --max:1180px;
+      --ok:#33d17a; --bad:#ff6b6b; --info:#64b5ff;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      background:
+        radial-gradient(1200px 600px at 50% -10%, rgba(212,175,55,.22), transparent 55%),
+        radial-gradient(900px 500px at 10% 20%, rgba(255,223,126,.12), transparent 60%),
+        radial-gradient(900px 500px at 90% 30%, rgba(212,175,55,.10), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.35;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .nav{
+      position:sticky; top:0; z-index:80;
+      backdrop-filter: blur(10px);
+      background: rgba(7,7,8,.62);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .nav-inner{
+      max-width:var(--max); margin:0 auto; padding:14px 18px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; font-weight:950; letter-spacing:.5px;}
+    .logo{
+      width:34px; height:34px; border-radius:10px;
+      background:
+        radial-gradient(18px 18px at 30% 30%, rgba(255,223,126,.9), transparent 60%),
+        linear-gradient(135deg, rgba(212,175,55,.95), rgba(212,175,55,.25));
+      box-shadow: 0 0 0 1px rgba(212,175,55,.25) inset, 0 10px 30px rgba(212,175,55,.12);
+    }
+    .nav-links{display:flex; gap:14px; color:var(--muted); font-weight:900; font-size:13px; flex-wrap:wrap;}
+    .nav-links a{text-decoration:none; padding:8px 10px; border-radius:12px;}
+    .nav-links a:hover{color:var(--text); background: rgba(255,255,255,.05)}
+    .nav-links a.active{color:var(--text); border:1px solid rgba(212,175,55,.35); background: rgba(212,175,55,.10)}
+    .btn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:14px;
+      cursor:pointer;
+      font-weight:950;
+      transition:.18s ease;
+      text-decoration:none;
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:8px;
+      user-select:none;
+      white-space:nowrap;
+    }
+    .btn:hover{transform: translateY(-1px); border-color: rgba(255,255,255,.22)}
+    .btn-gold{
+      border:1px solid rgba(212,175,55,.55);
+      background: linear-gradient(135deg, rgba(212,175,55,.95), rgba(255,223,126,.55));
+      color:#14110a;
+      box-shadow: 0 12px 40px rgba(212,175,55,.18);
+    }
+    .btn-gold:hover{box-shadow: 0 16px 55px rgba(212,175,55,.24)}
+    .btn-ghost{border:1px solid rgba(212,175,55,.35); background: transparent; color:var(--text);}
+
+    .wrap{max-width:var(--max); margin:0 auto; padding:22px 18px 90px;}
+    .card{
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .card-inner{padding:18px}
+    .muted{color:var(--muted)}
+    .kicker{
+      display:inline-flex; gap:8px; align-items:center;
+      padding:8px 12px; border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      color:var(--muted); font-weight:950; font-size:12.5px;
+    }
+    .dot{width:8px;height:8px;border-radius:99px;background:var(--gold); box-shadow:0 0 0 6px rgba(212,175,55,.15)}
+    h1{margin:14px 0 10px; font-size:44px; letter-spacing:-.6px; line-height:1.05}
+    h2{margin:0; font-size:22px; letter-spacing:-.3px}
+    .sub{max-width:760px; color:var(--muted); font-size:18px}
+    .hero-cta{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px}
+
+    .trustbar{
+      margin-top:18px;
+      display:grid; grid-template-columns: repeat(3,1fr);
+      gap:12px;
+    }
+    .pill{
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.04);
+      color:var(--muted);
+      display:flex; gap:10px; align-items:flex-start;
+      box-shadow: 0 1px 0 rgba(255,255,255,.05) inset;
+    }
+    .ic{
+      width:28px; height:28px; border-radius:10px;
+      background: rgba(212,175,55,.12);
+      border:1px solid rgba(212,175,55,.28);
+      display:flex; align-items:center; justify-content:center;
+      color:var(--gold2); font-weight:950;
+      flex:0 0 auto;
+    }
+
+    .main{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.55fr .75fr;
+      gap:14px;
+      align-items:start;
+    }
+    .featured{
+      background:
+        radial-gradient(680px 330px at 30% 0%, rgba(212,175,55,.18), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid var(--line);
+    }
+
+    /* urgency box */
+    .urgency{
+      margin-top:12px;
+      border-radius: var(--radius);
+      border:1px solid rgba(212,175,55,.26);
+      background: rgba(212,175,55,.08);
+      padding:14px 14px 12px;
+    }
+    .urgency-top{display:flex; justify-content:space-between; gap:10px; align-items:flex-start; flex-wrap:wrap;}
+    .urgency b{color: rgba(242,242,242,.95)}
+    .countdown{display:flex; gap:10px; margin-top:10px; flex-wrap:wrap;}
+    .timebox{
+      min-width:84px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      text-align:center;
+    }
+    .timebox strong{display:block; font-size:20px}
+    .timebox span{font-size:12px; color:var(--muted); font-weight:950; letter-spacing:.4px}
+    .bar{
+      margin-top:10px;
+      height:10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      overflow:hidden;
+    }
+    .bar > div{height:100%; width:0%; background: linear-gradient(90deg, rgba(212,175,55,.95), rgba(255,223,126,.55));}
+    .smallnote{font-size:12px; color:var(--muted); margin-top:10px}
+
+    /* winner slider */
+    .slider{
+      margin-top:14px;
+      position:relative;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+      overflow:hidden;
+    }
+    .slides{display:flex; transition: transform .35s ease; will-change: transform;}
+    .slide{min-width:100%; padding:16px; display:flex; gap:12px; align-items:flex-start;}
+    .avatar{
+      width:42px; height:42px; border-radius:14px;
+      border:1px solid rgba(212,175,55,.28);
+      background: rgba(212,175,55,.10);
+      display:flex; align-items:center; justify-content:center;
+      font-weight:950; color: var(--gold2);
+      flex:0 0 auto;
+    }
+    .slider-controls{
+      display:flex; justify-content:space-between; align-items:center;
+      padding:10px 12px;
+      border-top:1px solid rgba(255,255,255,.06);
+      color: var(--muted);
+      font-size:12px;
+      font-weight:950;
+      gap:10px;
+    }
+    .dots{display:flex; gap:6px; align-items:center}
+    .dotx{width:7px; height:7px; border-radius:999px; background: rgba(255,255,255,.18); border:1px solid rgba(255,255,255,.10);}
+    .dotx.active{
+      background: rgba(212,175,55,.75);
+      border-color: rgba(212,175,55,.35);
+      box-shadow: 0 0 0 4px rgba(212,175,55,.12);
+    }
+    .navbtn{
+      padding:8px 10px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      color: var(--text);
+      cursor:pointer;
+      font-weight:950;
+    }
+
+    /* Right mascot card */
+    .checkout{position: sticky; top: 24px; align-self: flex-start;}
+    .checkout img{display:block}
+
+    /* footer */
+    .footer{
+      border-top:1px solid rgba(255,255,255,.08);
+      padding:18px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      margin-top:22px;
+    }
+    .footer-links{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:10px}
+    .footer a{color:var(--muted); text-decoration:none}
+    .footer a:hover{color:var(--text)}
+
+    /* Social icons */
+    .social-row{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+    .soc{
+      width:40px; height:40px; border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      display:flex; align-items:center; justify-content:center;
+      text-decoration:none;
+      transition:.16s ease;
+      position:relative;
+    }
+    .soc:hover{transform: translateY(-1px); border-color: rgba(212,175,55,.45)}
+    .soc svg{width:18px; height:18px; fill: currentColor; color: rgba(242,242,242,.9)}
+    .soc[title]::after{
+      content: attr(title);
+      position:absolute; bottom: -34px; left:50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,.75);
+      border: 1px solid rgba(255,255,255,.10);
+      color: rgba(242,242,242,.9);
+      padding:6px 8px;
+      border-radius:12px;
+      font-size:11px;
+      white-space:nowrap;
+      opacity:0;
+      pointer-events:none;
+      transition:.12s ease;
+    }
+    .soc:hover::after{opacity:1}
+
+    /* mobile sticky bar */
+    .mobilebar{
+      position:fixed; left:0; right:0; bottom:0; z-index:90;
+      display:none;
+      padding:10px 12px;
+      background: rgba(7,7,8,.80);
+      backdrop-filter: blur(10px);
+      border-top:1px solid rgba(255,255,255,.08);
+    }
+    .mobilebar-inner{
+      max-width: var(--max);
+      margin: 0 auto;
+      display:flex; gap:10px; align-items:center; justify-content:space-between;
+    }
+    .mb-price{display:flex; flex-direction:column; gap:2px; font-weight:950;}
+    .mb-price span{font-size:12px; color:var(--muted); font-weight:950}
+    .mb-price b{font-size:14px}
+
+    @media (max-width: 980px){
+      .nav-links{display:none}
+      .main{grid-template-columns: 1fr}
+      .checkout{position:relative; top:auto}
+      .trustbar{grid-template-columns: 1fr}
+      h1{font-size:36px}
+      .mobilebar{display:block}
+      .wrap{padding-bottom: 130px;}
+    }
+  </style>
+</head>
+
+<body>
+  <!-- NAV -->
+  <div class="nav">
+    <div class="nav-inner">
+      <div class="brand" style="cursor:pointer" onclick="location.href='home.html'">
+        <div class="logo" aria-hidden="true"></div>
+        <div>VYRA<span style="color:var(--gold2)">+</span></div>
+      </div>
+
+      <div class="nav-links">
+        <a class="active" href="home.html">Home</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="verify.html">Verify</a>
+        <a href="pay.html">Pay</a>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="support.html">Support</a>
+      </div>
+
+      <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <a class="btn btn-ghost" href="verify.html">Login</a>
+        <a class="btn btn-gold" href="pricing.html">Join Now</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="kicker"><span class="dot"></span> Premium Rewards Club • Transparent Draws • Cancel Anytime</div>
+    <h1>VYRA+ Is a Rewards Club — Not a Lottery</h1>
+    <p class="sub">
+      Join a premium rewards community. Enjoy monthly member perks and access transparent, livestreamed prize draws.
+      No pressure. No tricks. Free entry always available.
+    </p>
+
+    <div class="hero-cta">
+      <a class="btn btn-gold" href="pricing.html">Join VYRA+</a>
+      <a class="btn btn-ghost" href="verify.html">Verify WhatsApp</a>
+      <a class="btn" href="pricing.html">See Plans</a>
+    </div>
+
+    <div class="trustbar">
+      <div class="pill">
+        <div class="ic">✓</div>
+        <div>
+          <strong>Guaranteed Member Value</strong><br>
+          <span class="muted">Monthly perks + partner benefits delivered independent of draws.</span>
+        </div>
+      </div>
+      <div class="pill">
+        <div class="ic">◉</div>
+        <div>
+          <strong>Transparent Draws</strong><br>
+          <span class="muted">Livestreamed draws with winners published after each event.</span>
+        </div>
+      </div>
+      <div class="pill">
+        <div class="ic">↺</div>
+        <div>
+          <strong>Cancel Anytime</strong><br>
+          <span class="muted">Designed for admin access from Australia & India.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="main">
+      <!-- LEFT -->
+      <div>
+        <div class="card featured">
+          <div class="card-inner">
+            <strong style="display:block; font-size:14px;">Next Featured Draw</strong>
+            <div class="muted" style="margin-top:6px;">Example prize: “iPhone + Travel Voucher” • Livestreamed</div>
+
+            <div class="urgency" aria-label="urgency">
+              <div class="urgency-top">
+                <div>
+                  <b>Limited spots</b> for this month’s member bundle
+                  <div class="smallnote" style="margin-top:6px;">
+                    Next draw closes in: <b id="closeText">—</b>
+                  </div>
+                </div>
+                <div class="smallnote" style="margin-top:0;">
+                  Spots left: <b id="spotsLeft">—</b> / <span id="spotsTotal">—</span>
+                </div>
+              </div>
+
+              <div class="countdown">
+                <div class="timebox"><strong id="d">00</strong><span>DAYS</span></div>
+                <div class="timebox"><strong id="h">00</strong><span>HOURS</span></div>
+                <div class="timebox"><strong id="m">00</strong><span>MINS</span></div>
+                <div class="timebox"><strong id="s">00</strong><span>SECS</span></div>
+              </div>
+
+              <div class="bar"><div id="spotsBar"></div></div>
+              <div class="smallnote">Preview mode: adjust spots + draw date in script.</div>
+            </div>
+
+            <div class="smallnote">
+              Times shown in <b>IST</b> & <b>AEST</b> on the live site. Winners published after each draw.
+            </div>
+          </div>
+        </div>
+
+        <div class="slider" aria-label="winner proof slider">
+          <div class="slides" id="slides">
+            <div class="slide">
+              <div class="avatar">R</div>
+              <div>
+                <b>Rahul • Hyderabad</b><br>
+                <span class="muted">Prize: Smartphone • Draw: Jan 1</span><br>
+                <span class="muted">Proof: Announced live + posted to Winner Wall</span>
+              </div>
+            </div>
+            <div class="slide">
+              <div class="avatar">A</div>
+              <div>
+                <b>Amit • Melbourne</b><br>
+                <span class="muted">Prize: Travel Voucher • Draw: Jan 1</span><br>
+                <span class="muted">Proof: Verified contact + winner post (with consent)</span>
+              </div>
+            </div>
+            <div class="slide">
+              <div class="avatar">S</div>
+              <div>
+                <b>Shreya • Bengaluru</b><br>
+                <span class="muted">Prize: Gift Card Bundle • Draw: Jan 1</span><br>
+                <span class="muted">Proof: Livestream timestamp + winner ID logged</span>
+              </div>
+            </div>
+          </div>
+          <div class="slider-controls">
+            <button class="navbtn" id="prevBtn">‹</button>
+            <div class="dots" id="dots"></div>
+            <div class="muted">Auto-plays • <span id="slideIndex">1</span>/3</div>
+            <button class="navbtn" id="nextBtn">›</button>
+          </div>
+        </div>
+
+        <div class="footer">
+          <div class="footer-links">
+            <a href="pricing.html">Plans</a>
+            <a href="verify.html">Verify</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="support.html">Support</a>
+          </div>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <div>© <span id="yr"></span> VYRA+ Rewards Club • Preview</div>
+            <span class="muted">Domain: vyraplusclub.online</span>
+          </div>
+
+          <div style="margin-top:10px">
+            <div class="muted" style="font-weight:950; margin-bottom:8px">Socials</div>
+            <div class="social-row" id="socialRowFooter"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <aside class="checkout" aria-label="Brand mascot">
+        <div class="card" style="display:flex; justify-content:center; align-items:center; padding:24px;">
+          <!-- IMPORTANT: Replace this with a relative path before going online -->
+          <img src="c:\\vyraplus\\rabbit.png.png" alt="rabbit"
+               style="max-width:100%; height:auto; filter: drop-shadow(0 20px 40px rgba(0,0,0,0.6));" />
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <div class="mobilebar" aria-label="mobile sticky join bar">
+    <div class="mobilebar-inner">
+      <div class="mb-price">
+        <span>Selected</span>
+        <b>VYRA+ PLUS • ₹999/mo</b>
+      </div>
+      <a class="btn btn-gold" href="pricing.html">Join Now</a>
+    </div>
+  </div>
+
+  <script>
+    // ===== Socials =====
+    const SOCIALS = [
+      { name:"Instagram", href:"https://www.instagram.com/vyra.plus/", label:"@vyra.plus", icon:"ig" },
+      { name:"X", href:"https://x.com/VyraPlus", label:"@VyraPlus", icon:"x" },
+      { name:"YouTube", href:"https://www.youtube.com/@VyraPlusclub", label:"@VyraPlusclub", icon:"yt" },
+      { name:"Telegram", href:"https://t.me/vyraclub", label:"VYRA+ Official", icon:"tg" },
+      { name:"Facebook", href:"https://www.facebook.com/profile.php?id=61584831923342", label:"VYRA plus", icon:"fb" },
+    ];
+    function iconSVG(kind){
+      if(kind==="ig") return `<svg viewBox="0 0 24 24"><path d="M7 2h10a5 5 0 0 1 5 5v10a5 5 0 0 1-5 5H7a5 5 0 0 1-5-5V7a5 5 0 0 1 5-5zm10 2H7a3 3 0 0 0-3 3v10a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V7a3 3 0 0 0-3-3zm-5 4a5 5 0 1 1 0 10a5 5 0 0 1 0-10zm0 2a3 3 0 1 0 0 6a3 3 0 0 0 0-6zm5.5-2.1a1.1 1.1 0 1 1 0 2.2a1.1 1.1 0 0 1 0-2.2z"/></svg>`;
+      if(kind==="x")  return `<svg viewBox="0 0 24 24"><path d="M18.9 2H22l-7.2 8.2L23 22h-6.8l-5.3-6.9L4.8 22H2l7.7-8.8L1 2h7l4.8 6.3L18.9 2zm-1.2 18h1.9L7.1 3.8H5.1L17.7 20z"/></svg>`;
+      if(kind==="tg") return `<svg viewBox="0 0 24 24"><path d="M21.9 3.1c.3.3.4.8.3 1.2l-3.1 16.2c-.1.6-.6 1-1.2 1.1c-.3 0-.6-.1-.9-.3l-5.4-4l-2.6 2.5c-.3.3-.6.4-1 .3c-.4-.1-.7-.4-.7-.8l.4-4.6L3.2 12c-.5-.3-.8-.8-.7-1.4c.1-.6.5-1 1-1.2L20.5 2c.5-.2 1.1-.1 1.4.1zM8.9 19l1.8-1.8l-2.2-1.6l.4 3.4zM5.8 11.6l3.5 2.6l8.5-8.1l-12 5.5z"/></svg>`;
+      if(kind==="fb") return `<svg viewBox="0 0 24 24"><path d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.6 1.6-1.6h1.7V4.8c-.3 0-1.4-.1-2.7-.1c-2.7 0-4.5 1.6-4.5 4.6V11H7v3h2.6v8h3.9z"/></svg>`;
+      return `<svg viewBox="0 0 24 24"><path d="M21.6 7.2a3 3 0 0 0-2.1-2.1C17.8 4.6 12 4.6 12 4.6s-5.8 0-7.5.5A3 3 0 0 0 2.4 7.2 31.6 31.6 0 0 0 2 12a31.6 31.6 0 0 0 .4 4.8 3 3 0 0 0 2.1 2.1c1.7.5 7.5.5 7.5.5s5.8 0 7.5-.5a3 3 0 0 0 2.1-2.1A31.6 31.6 0 0 0 22 12a31.6 31.6 0 0 0-.4-4.8zM10 15.5V8.5L16 12l-6 3.5z"/></svg>`;
+    }
+    function renderSocialRow(elId){
+      const el = document.getElementById(elId);
+      if(!el) return;
+      el.innerHTML = SOCIALS.map(s => `
+        <a class="soc" href="${s.href}" target="_blank" rel="noopener noreferrer" title="${s.name} ${s.label}">
+          ${iconSVG(s.icon)}
+        </a>
+      `).join("");
+    }
+    renderSocialRow("socialRowFooter");
+
+    // ===== Countdown + spots =====
+    const drawAtUTC = new Date("2026-01-09T12:30:00Z").getTime();
+    const SPOTS_TOTAL = 500;
+    let SPOTS_LEFT = 78;
+    function pad(n){ return String(n).padStart(2, "0"); }
+    function tick(){
+      const now = Date.now();
+      let diff = Math.max(0, drawAtUTC - now);
+      const days = Math.floor(diff / (1000*60*60*24));
+      diff -= days * (1000*60*60*24);
+      const hrs = Math.floor(diff / (1000*60*60));
+      diff -= hrs * (1000*60*60);
+      const mins = Math.floor(diff / (1000*60));
+      diff -= mins * (1000*60);
+      const secs = Math.floor(diff / 1000);
+      const set = (id,val) => { const el=document.getElementById(id); if(el) el.textContent=val; }
+      set("d", pad(days)); set("h", pad(hrs)); set("m", pad(mins)); set("s", pad(secs));
+      set("closeText", `${days}d ${pad(hrs)}h ${pad(mins)}m ${pad(secs)}s`);
+    }
+    function updateSpots(){
+      const set = (id,val) => { const el=document.getElementById(id); if(el) el.textContent=val; }
+      set("spotsTotal", SPOTS_TOTAL);
+      set("spotsLeft", SPOTS_LEFT);
+      const usedPct = Math.min(100, Math.max(0, ((SPOTS_TOTAL - SPOTS_LEFT) / SPOTS_TOTAL) * 100));
+      const bar = document.getElementById("spotsBar");
+      if(bar) bar.style.width = usedPct.toFixed(0) + "%";
+    }
+    tick(); updateSpots(); setInterval(tick, 1000);
+    document.getElementById("yr").textContent = new Date().getFullYear();
+
+    // ===== Slider =====
+    const slidesEl = document.getElementById("slides");
+    const dotsEl = document.getElementById("dots");
+    const slideCount = slidesEl.children.length;
+    let currentSlide = 0;
+    let timer = null;
+    function renderDots(){
+      dotsEl.innerHTML = "";
+      for(let i=0;i<slideCount;i++){
+        const d = document.createElement("div");
+        d.className = "dotx" + (i===currentSlide ? " active" : "");
+        d.onclick = () => goSlide(i);
+        dotsEl.appendChild(d);
+      }
+      document.getElementById("slideIndex").textContent = String(currentSlide+1);
+    }
+    function goSlide(i){
+      currentSlide = (i + slideCount) % slideCount;
+      slidesEl.style.transform = `translateX(-${currentSlide*100}%)`;
+      renderDots();
+      restart();
+    }
+    function restart(){
+      if(timer) clearInterval(timer);
+      timer = setInterval(() => goSlide(currentSlide+1), 4500);
+    }
+    document.getElementById("prevBtn").onclick = () => goSlide(currentSlide-1);
+    document.getElementById("nextBtn").onclick = () => goSlide(currentSlide+1);
+    renderDots(); restart();
+  </script>
+</body>
+</html>
